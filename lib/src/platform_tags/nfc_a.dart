@@ -55,4 +55,16 @@ class NfcA {
       'data': data,
     }).then((value) => value!);
   }
+
+  /// Sends the NfcA command to the tag.
+  ///
+  /// This uses NfcA#transceive API on Android.
+  Future<List<Uint8List>> transceiveMultiple({
+    required List<Uint8List> data,
+  }) async {
+    return channel.invokeMethod('NfcA#transceiveMultiple', {
+      'handle': _tag.handle,
+      'data': data,
+    }).then((value) => value.cast<Uint8List>());
+  }
 }

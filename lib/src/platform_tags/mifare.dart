@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
+import './iso7816.dart';
 import '../channel.dart';
 import '../nfc_manager/nfc_manager.dart';
 import '../translator.dart';
-import './iso7816.dart';
 
 /// The class provides access to NFCMiFareTag API for iOS.
 ///
@@ -45,6 +45,17 @@ class MiFare {
       'handle': _tag.handle,
       'commandPacket': commandPacket,
     }).then((value) => value!);
+  }
+
+  /// Sends the native MiFare command to the tag.
+  ///
+  /// This uses NFCMiFareTag#sendMiFareCommand API on iOS.
+  Future<Uint8List> sendMiFareCommandMultiple(
+      List<Uint8List> commandPackets) async {
+    return channel.invokeMethod('MiFare#sendMiFareCommandMultiple', {
+      'handle': _tag.handle,
+      'commandPackets': commandPackets,
+    }).then((value) => value.cast<Uint8List>());
   }
 
   /// Sends the ISO7816 APDU to the tag.

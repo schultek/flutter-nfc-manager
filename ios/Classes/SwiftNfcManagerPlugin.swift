@@ -74,6 +74,7 @@ public class SwiftNfcManagerPlugin: NSObject, FlutterPlugin {
     case "Iso7816#sendCommand": handleIso7816SendCommand(call.arguments as! [String : Any?], result: result)
     case "Iso7816#sendCommandRaw": handleIso7816SendCommandRaw(call.arguments as! [String : Any?], result: result)
     case "MiFare#sendMiFareCommand": handleMiFareSendMiFareCommand(call.arguments as! [String : Any?], result: result)
+    case "MiFare#sendMiFareCommandMultiple": handleMiFareSendMiFareCommandMultiple(call.arguments as! [String : Any?], result: result)
     case "MiFare#sendMiFareIso7816Command": handleMiFareSendMiFareIso7816Command(call.arguments as! [String : Any?], result: result)
     case "MiFare#sendMiFareIso7816CommandRaw": handleMiFareSendMiFareIso7816CommandRaw(call.arguments as! [String : Any?], result: result)
     default: result(FlutterMethodNotImplemented)
@@ -672,6 +673,30 @@ public class SwiftNfcManagerPlugin: NSObject, FlutterPlugin {
           result(data)
         }
       }
+    }
+  }
+
+  @available(iOS 13.0, *)
+  private func handleMiFareSendMiFareCommandMultiple(_ arguments: [String : Any?], result: @escaping FlutterResult) {
+    tagHandler(NFCMiFareTag.self, arguments, result) { tag in
+      let commandPackets = (arguments["commandPackets"] as! Array<FlutterStandardTypedData>)
+      var out: [Data] = []
+
+      func nextCommand(_ index: Int) -> Void {
+        tag.sendMiFareCommand(commandPacket: commandPackets[index].data,  completionHandler: { data, error in
+          if let error = error {
+            result(getFlutterError(error))
+          } else {
+            out.append(data)
+            if (index < commandPackets.count - 1) {
+              nextCommand(index+1)
+            } else {
+              result(out)
+            }
+          }
+        })
+      }
+      nextCommand(0);
     }
   }
 

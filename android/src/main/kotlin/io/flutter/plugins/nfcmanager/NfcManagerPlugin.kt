@@ -70,6 +70,7 @@ class NfcManagerPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "Ndef#write" -> handleNdefWrite(call, result)
       "Ndef#writeLock" -> handleNdefWriteLock(call, result)
       "NfcA#transceive" -> handleNfcATransceive(call, result)
+      "NfcA#transceiveMultiple" -> handleNfcATransceiveMultiple(call, result)
       "NfcB#transceive" -> handleNfcBTransceive(call, result)
       "NfcF#transceive" -> handleNfcFTransceive(call, result)
       "NfcV#transceive" -> handleNfcVTransceive(call, result)
@@ -171,6 +172,17 @@ class NfcManagerPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     tagHandler(call, result, { NfcA.get(it) }) {
       val data = call.argument<ByteArray>("data")!!
       result.success(it.transceive(data))
+    }
+  }
+
+  private fun handleNfcATransceiveMultiple(call: MethodCall, result: Result) {
+    tagHandler(call, result, { NfcA.get(it) }) {
+      val datas = call.argument<List<ByteArray>>("data")!!
+      var out = mutableListOf<ByteArray>();
+      for (data in datas) {
+        out.add(it.transceive(data));
+      }
+      result.success(out);
     }
   }
 
