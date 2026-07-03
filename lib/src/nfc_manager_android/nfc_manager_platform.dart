@@ -50,4 +50,9 @@ final class NfcManagerAndroidPlatform implements NfcManager {
   Future<void> stopSession({String? alertMessageIos, String? errorMessageIos}) {
     return NfcManagerAndroid.instance.disableReaderMode();
   }
+
+  @override
+  Future<void> updateAlert({String? alertMessage}) async {
+    // No-op on Android
+  }
 }

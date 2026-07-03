@@ -139,6 +139,15 @@ class NfcManagerPlugin: FlutterPlugin, ActivityAware, HostApiPigeon, BroadcastRe
     return tech.transceive(bytes)
   }
 
+  override fun nfcATransceiveMultiple(handle: String, bytesList: List<ByteArray>): List<ByteArray> {
+    val tech = forceConnect(handle) { NfcA.get(it) }
+    val out = mutableListOf<ByteArray>()
+    for (bytes in bytesList) {
+      out.add(tech.transceive(bytes))
+    }
+    return out
+  }
+
   override fun nfcBGetMaxTransceiveLength(handle: String): Long {
     val tech = forceConnect(handle) { NfcB.get(it) }
     return tech.maxTransceiveLength.toLong()

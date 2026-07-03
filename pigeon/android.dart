@@ -29,6 +29,7 @@ abstract class HostApiPigeon {
   int nfcAGetTimeout({required String handle});
   void nfcASetTimeout({required String handle, required int timeout});
   Uint8List nfcATransceive({required String handle, required Uint8List bytes});
+  List<Uint8List> nfcATransceiveMultiple({required String handle, required List<Uint8List> bytesList});
   int nfcBGetMaxTransceiveLength({required String handle});
   Uint8List nfcBTransceive({required String handle, required Uint8List bytes});
   int nfcFGetMaxTransceiveLength({required String handle});

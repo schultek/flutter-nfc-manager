@@ -53,6 +53,9 @@ abstract class NfcManager {
   /// (iOS only) [alertMessageIos] and [errorMessageIos] are used to display success or error message on the popup.
   /// If both are used, [errorMessageIos] is used.
   Future<void> stopSession({String? alertMessageIos, String? errorMessageIos});
+
+  /// (iOS only) Updates the alert message of the active NFC session.
+  Future<void> updateAlert({String? alertMessage});
 }
 
 /// Represents the tag discovered by the NFC session.

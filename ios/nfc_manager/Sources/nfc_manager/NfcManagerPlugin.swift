@@ -337,6 +337,33 @@ public class NfcManagerPlugin: NSObject, FlutterPlugin, HostApiPigeon {
     }
   }
 
+  func miFareSendMiFareCommandMultiple(handle: String, commandPackets: [FlutterStandardTypedData], completion: @escaping (Result<[FlutterStandardTypedData], Error>) -> Void) {
+    guard let tag = cachedTags[handle] as? NFCMiFareTag else {
+      completion(.failure(FlutterError(code: "tag_not_found", message: "You may have disable the session.", details: nil)))
+      return
+    }
+    var out: [FlutterStandardTypedData] = []
+    func nextCommand(_ index: Int) {
+      tag.sendMiFareCommand(commandPacket: commandPackets[index].data) { data, error in
+        if let error = error {
+          completion(.failure(error))
+        } else {
+          out.append(FlutterStandardTypedData(bytes: data))
+          if index < commandPackets.count - 1 {
+            nextCommand(index + 1)
+          } else {
+            completion(.success(out))
+          }
+        }
+      }
+    }
+    if commandPackets.isEmpty {
+      completion(.success([]))
+    } else {
+      nextCommand(0)
+    }
+  }
+
   func miFareSendMiFareISO7816Command(handle: String, apdu: Iso7816ApduPigeon, completion: @escaping (Result<Iso7816ResponseApduPigeon, Error>) -> Void) {
     guard let tag = cachedTags[handle] as? NFCMiFareTag else {
       completion(.failure(FlutterError(code: "tag_not_found", message: "You may have disable the session.", details: nil)))

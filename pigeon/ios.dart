@@ -44,6 +44,7 @@ abstract class HostApiPigeon {
   @async FeliCaStatusFlagPigeon feliCaResetMode({required String handle});
   @async Uint8List feliCaSendFeliCaCommand({required String handle, required Uint8List commandPacket});
   @async Uint8List miFareSendMiFareCommand({required String handle, required Uint8List commandPacket});
+  @async List<Uint8List> miFareSendMiFareCommandMultiple({required String handle, required List<Uint8List> commandPackets});
   @async Iso7816ResponseApduPigeon miFareSendMiFareISO7816Command({required String handle, required Iso7816ApduPigeon apdu});
   @async Iso7816ResponseApduPigeon miFareSendMiFareISO7816CommandRaw({required String handle, required Uint8List data});
   @async Iso7816ResponseApduPigeon iso7816SendCommand({required String handle, required Iso7816ApduPigeon apdu});

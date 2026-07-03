@@ -63,4 +63,9 @@ final class NfcAAndroid {
   Future<Uint8List> transceive(Uint8List bytes) {
     return hostApi.nfcATransceive(handle: _handle, bytes: bytes);
   }
+
+  // DOC:
+  Future<List<Uint8List>> transceiveMultiple({required List<Uint8List> data}) {
+    return hostApi.nfcATransceiveMultiple(handle: _handle, bytesList: data).then((value) => value.cast<Uint8List>());
+  }
 }

@@ -51,6 +51,14 @@ final class MiFareIos {
   }
 
   // DOC:
+  Future<List<Uint8List>> sendMiFareCommandMultiple(List<Uint8List> commandPackets) {
+    return hostApi.miFareSendMiFareCommandMultiple(
+      handle: _handle,
+      commandPackets: commandPackets,
+    ).then((value) => value.cast<Uint8List>());
+  }
+
+  // DOC:
   Future<Iso7816ResponseApduIos> sendMiFareIso7816Command({
     required int instructionClass,
     required int instructionCode,

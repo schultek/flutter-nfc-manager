@@ -39,4 +39,11 @@ final class NfcManagerIosPlatform implements NfcManager {
       errorMessage: errorMessageIos,
     );
   }
+
+  @override
+  Future<void> updateAlert({String? alertMessage}) async {
+    if (alertMessage != null) {
+      await NfcManagerIos.instance.tagSessionSetAlertMessage(alertMessage: alertMessage);
+    }
+  }
 }
